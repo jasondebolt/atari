@@ -7,6 +7,7 @@ MOS 6502 Atari projects
 [Stella Emulator](https://stella-emu.github.io/)
 [JAVATARI](https://javatari.org)
 [8 Bit Workshop](http://8bitworkshop.com)
+[macro.h and vcs.h files](https://github.com/munsie/dasm/tree/master/machines/atari2600)
 
 
 ## DASM Macro Assembler
