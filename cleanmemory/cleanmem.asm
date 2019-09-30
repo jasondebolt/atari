@@ -25,3 +25,17 @@ MemLoop:
     dex            ; x--
                    ; This will eventually set the z-flag.
     bne MemLoop    ; Loops until X==0 (Meaning z-flag set)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Fill ROM size to exactly 4KB
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    org $FFFC      ; Force code to start at position FFFC
+                   ; Whenever the Atari system is reset, it will come to this position $FFFC.
+                   ; It will look for the start instruction and it will find $F000
+    .word Start    ; 'Reset' vector at $FFFC (where program starts).
+                   ; Occupies bytes $FFFC and $FFFD
+                   ; '.word' adds 2 bytes.
+    .word Start    ; 'Interrupt' vector at $FFFE (unused in VCS)
+                   ; '.word' adds 2 bytes.
+                   ; Occupies bytes $FFFE and $FFFF
+                   ; We used 2 bytes because labels like 'Start' require 16 bits (2 bytes)
