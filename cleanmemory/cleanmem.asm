@@ -9,10 +9,10 @@ Start:
     ldx #$FF       ; Loads the X register with #$FF
     txs            ; Transfers X register to stack S(tack) register
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Clear the Zero Page Region ($00 to $FF)
-; Meaning the entire TIA register space and also RAM
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clear the Zero Page Region ($00 to $FF)
+;; Meaning the entire TIA register space and also RAM
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     lda #0         ; A = 0
                    ; Loads value of 0 into accumulator A register.
     ldx #$FF       ; X = #$FF
@@ -28,7 +28,7 @@ MemLoop:
     bne MemLoop    ; Loops until X==0 (Meaning z-flag set)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Fill ROM size to exactly 4KB
+;; Fill ROM size to exactly 4KB
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     org $FFFC      ; Force code to start at position FFFC
                    ; Whenever the Atari system is reset, it will come to this position $FFFC.

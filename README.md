@@ -2,12 +2,13 @@
 MOS 6502 Atari projects
 
 ## Links
-[NMOS 6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
-[DASM Macro Assembler](http://dasm-dillon.sourceforge.net/)
-[Stella Emulator](https://stella-emu.github.io/)
-[JAVATARI](https://javatari.org)
-[8 Bit Workshop](http://8bitworkshop.com)
-[macro.h and vcs.h files](https://github.com/munsie/dasm/tree/master/machines/atari2600)
+* [NMOS 6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
+* [DASM Macro Assembler](http://dasm-dillon.sourceforge.net/)
+* [Stella Emulator](https://stella-emu.github.io/)
+* [JAVATARI](https://javatari.org)
+* [8 Bit Workshop](http://8bitworkshop.com)
+* [macro.h and vcs.h files](https://github.com/munsie/dasm/tree/master/machines/atari2600)
+* [Atari Color Palette](https://en.wikipedia.org/wiki/List_of_video_game_console_palettes#Atari_2600)
 
 
 ## DASM Macro Assembler
@@ -23,6 +24,11 @@ $ chmod a+x cart.bin
 ```
 
 ## Running cleanmem in the Stella emulator
+1) alias stella="/Applications/Stella.app/Contents/MacOS/Stella"
+2) cd colorbg
+3) make
+3) stella cart.bin
+OR
 1) Open the Stella emulator
 2) Select the path to your cart.bin file
 3) Double click on cart.bin
