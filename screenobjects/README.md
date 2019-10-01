@@ -1,3 +1,3 @@
 # Screen objects
 
-<img src="screenobjects/screenobjects.png"></img>
+<img src="/screenobjects/screenobjects.png"></img>
