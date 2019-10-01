@@ -3,7 +3,9 @@ MOS 6502 Atari projects
 
 ## Table Of Contents
 * [Links](#links)
-* [Memory Map](#memory-map)
+* [6502.org](#6502org)
+* [Processor Flags](#processor-flags)
+* [Atari Memory Map](#atari-memory-map)
 * [Development](#development)
   * [Online Development](#online-development)
   * [Offline Development](#offline-development)
@@ -15,7 +17,6 @@ MOS 6502 Atari projects
 * [Gustavo Pezzi's online "Programming Games for the Atari 2600" course](https://www.udemy.com/course/programming-games-for-the-atari-2600)
 * [Stevent Hugg's "Making Games for the Atari 2600" book](https://www.amazon.com/Making-Games-Atari-2600-Steven/dp/1541021304)
 * [8 Bit Workshop Browser IDE](https://8bitworkshop.com)
-* [NMOS 6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
 * [DASM Macro Assembler](http://dasm-dillon.sourceforge.net/)
 * [Stella Emulator](https://stella-emu.github.io/)
 * [JAVATARI](https://javatari.org)
@@ -24,7 +25,54 @@ MOS 6502 Atari projects
 * [Atari Color Palette](https://en.wikipedia.org/wiki/List_of_video_game_console_palettes#Atari_2600)
 * [PlayerPal Online Sprite Creator](https://alienbill.com/2600/playerpalnext.html)
 
-## Memory Map
+
+## 6502.org
+* [Assembly In One Step](https://dwheeler.com/6502/oneelkruns/asm1step.html)
+* [NMOS 6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
+* [6502 Compare Instructions](http://www.6502.org/tutorials/compare_instructions.html)
+* [Overflow Flag](http://www.6502.org/tutorials/vflag.html)
+* [Beyond 8-bit Unsigned Comparisons](http://www.6502.org/tutorials/compare_beyond.html)
+
+
+## Processor Flags
+```
+   Processor Status
+   ----------------
+   
+   The processor status register is not directly accessible by any 6502 
+   instruction.  Instead, there exist numerous instructions that test the 
+   bits of the processor status register.  The flags within the register 
+   are:
+   
+   
+       bit ->   7                           0
+              +---+---+---+---+---+---+---+---+
+              | N | V |   | B | D | I | Z | C |  <-- flag, 0/1 = reset/set
+              +---+---+---+---+---+---+---+---+
+              
+              
+       N  =  NEGATIVE. Set if bit 7 of the accumulator is set.
+       
+       V  =  OVERFLOW. Set if the addition of two like-signed numbers or the
+             subtraction of two unlike-signed numbers produces a result
+             greater than +127 or less than -128.
+             
+       B  =  BRK COMMAND. Set if an interrupt caused by a BRK, reset if
+             caused by an external interrupt.
+             
+       D  =  DECIMAL MODE. Set if decimal mode active.
+       
+       I  =  IRQ DISABLE.  Set if maskable interrupts are disabled.
+             
+       Z  =  ZERO.  Set if the result of the last operation (load/inc/dec/
+             add/sub) was zero.
+             
+       C  =  CARRY. Set if the add produced a carry, or if the subtraction
+             produced a borrow.  Also holds bits after a logical shift.
+ ```            
+        
+
+## Atari Memory Map
 <img src="memory_map.png" height="150px"/>
 
 ## Sprites
