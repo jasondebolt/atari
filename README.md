@@ -2,6 +2,7 @@
 MOS 6502 Atari projects
 
 ## Links
+* [8 Bit Workshop Browser IDE](https://8bitworkshop.com)
 * [NMOS 6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
 * [DASM Macro Assembler](http://dasm-dillon.sourceforge.net/)
 * [Stella Emulator](https://stella-emu.github.io/)
