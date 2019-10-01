@@ -12,6 +12,7 @@ MOS 6502 Atari projects
     * [DASM Macro Assembler](#dasm-macro-assembler)
     * [Creating the cleanmem machine code binary](#creating-the-cleanmem-machine-code-binary)
     * [Running cleanmem in the Stella emulator](#running-cleanmem-in-the-stella-emulator)
+* [Python Helpers](#python-helpers)
 
 ## Links
 * [Gustavo Pezzi's online "Programming Games for the Atari 2600" course](https://www.udemy.com/course/programming-games-for-the-atari-2600)
@@ -116,3 +117,18 @@ OR
 2) Select the path to your cart.bin file
 3) Double click on cart.bin
 4) Enter the backtick (\`) to toggle between debug mode.
+
+
+
+## Python Helpers
+View binary representation of a number:
+```python
+def form(exp):
+    return '{0:08b}'.format(exp)
+    
+Example:
+>>> form(10 ^ 5)
+'00001111'
+>>> form(0b1010 ^ 0b0101)
+'00001111'
+```
