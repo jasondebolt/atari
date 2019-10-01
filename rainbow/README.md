@@ -1,3 +1,3 @@
 # Rainbow
 
-<img src="rainbow/screenshot.png"/>
+<img src="/rainbow/screenshot.png"></img>
