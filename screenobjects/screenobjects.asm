@@ -73,11 +73,13 @@ VisibleScanLines:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ldy #0
 ScoreboardLoop:
+    ; Each pass of this renders a line in the sprite bitmap
     lda NumberBitmap,Y
     sta PF1
-    sta WSYNC
-    iny
-    cpy #10
+    sta WSYNC    ; wait for scanline to be rendered...
+    iny          ; Y++
+    cpy #10      ; Compare with with decimal 10. If equal to 10, the zero flag is set and we exit the loop.
+                 ; Notice there are 10 lines in the bitmap.
     bne ScoreboardLoop
 
     lda #0
@@ -95,15 +97,33 @@ ScoreboardLoop:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ldy #0
 Player0Loop:
+    ; Each pass of this renders a line in the sprite bitmap
     lda PlayerBitmap,Y
     sta GRP0
-    sta WSYNC
-    iny
-    cpy #10
+    sta WSYNC          ; Wait for the scanline to be rendered.
+    iny                ; Y++
+    cpy #10            ; Compare Y to decimal 10. If zero, the zero flag is set and we exit the loop.
     bne Player0Loop
 
     lda #0
     sta GRP0    ; disable Player 0 graphics
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Displays 10 scanlines for the Player 1 graphics
+;; Pulls data from an array of bytes defined in NumberBitmap
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ldy #0
+Player1Loop:
+    ; Each pass of this renders a line in the sprite bitmap
+    lda PlayerBitmap,Y
+    sta GRP1
+    sta WSYNC          ; Wait for the scanline to be rendered.
+    iny                ; Y++
+    cpy #10            ; Compare Y to decimal 10. If zero, the zero flag is set and we exit the loop.
+    bne Player1Loop
+
+    lda #0
+    sta GRP1    ; disable Player 0 graphics
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
