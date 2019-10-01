@@ -13,6 +13,7 @@ MOS 6502 Atari projects
 
 ## Links
 * [Gustavo Pezzi's online "Programming Games for the Atari 2600" course](https://www.udemy.com/course/programming-games-for-the-atari-2600)
+* [Stevent Hugg's "Making Games for the Atari 2600" book](https://www.amazon.com/Making-Games-Atari-2600-Steven/dp/1541021304)
 * [8 Bit Workshop Browser IDE](https://8bitworkshop.com)
 * [NMOS 6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
 * [DASM Macro Assembler](http://dasm-dillon.sourceforge.net/)
@@ -35,7 +36,7 @@ Use the [8 Bit Workshop IDE](https://8bitworkshop.com/) with the built in [Javat
 <img src="8bitworkshop.png" height="350px"/>
 
 ### Offline Development
-Use the DASM Macro Assembler](http://dasm-dillon.sourceforge.net/) and the [Stella Emulator](https://stella-emu.github.io/) for local development. It's more powerful than browser development using the 8 Bit Workshop IDE with the Javatari IDE.
+Use the [DASM Macro Assembler](http://dasm-dillon.sourceforge.net/) and the [Stella Emulator](https://stella-emu.github.io/) for local development. It's more powerful than browser development using the 8 Bit Workshop IDE with the Javatari IDE.
 
 #### DASM Macro Assembler
 1) Download DASM for mac (or whatever your OS is)
