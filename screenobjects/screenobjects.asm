@@ -6,6 +6,14 @@
     include "vcs.h"
     include "macro.h"
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Start an uninitialised segment at $80 for variable declaration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    seg.u Variables             ; You can call this whatever you want.
+    org $80                     ; Store our variables starting at address 80, before our ROM code.
+P0Height ds 1                   ; Defines 1 byte for player 0 height
+P1Height ds 1                   ; Defines 1 byte for player 1 height
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Start our ROM code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21,6 +29,10 @@ Reset:
     lda #%1111       ; white playfield color
     sta COLUPF
 
+    lda #10          ; A = 10
+    sta P0Height     ; same as P0Heigt = 10
+    sta P1Height     ; P1Height = 10
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We set the TIA registers for the colors of P0 and P1.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -29,6 +41,9 @@ Reset:
 
     lda #$C6         ; player 1 color light green
     sta COLUP1
+
+    ldy #%00000010    ; Colors the scoreboard with each player's color.
+    sty CTRLPF
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Start a new frame by configuring VBLANK and VSYNC
@@ -41,7 +56,7 @@ StartFrame:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Generate the three lines of VSYNC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    REPEAT 3
+    REPEAT 3       ; REPEAT is NOT a loop. Each pass generates a new instruction that can quickly consume your 4K of ROM.
         sta WSYNC  ; three VSYNC scanlines
     REPEND
 
@@ -99,10 +114,10 @@ ScoreboardLoop:
 Player0Loop:
     ; Each pass of this renders a line in the sprite bitmap
     lda PlayerBitmap,Y
-    sta GRP0
+    sta GRP0           ; This is the register in the TIA that renders player 0.
     sta WSYNC          ; Wait for the scanline to be rendered.
     iny                ; Y++
-    cpy #10            ; Compare Y to decimal 10. If zero, the zero flag is set and we exit the loop.
+    cpy P0Height            ; Compare Y to decimal 10. If zero, the zero flag is set and we exit the loop.
     bne Player0Loop
 
     lda #0
@@ -116,10 +131,10 @@ Player0Loop:
 Player1Loop:
     ; Each pass of this renders a line in the sprite bitmap
     lda PlayerBitmap,Y
-    sta GRP1
+    sta GRP1           ; This is the player 1 TIA register.
     sta WSYNC          ; Wait for the scanline to be rendered.
     iny                ; Y++
-    cpy #10            ; Compare Y to decimal 10. If zero, the zero flag is set and we exit the loop.
+    cpy P1Height            ; Compare Y to decimal 10. If zero, the zero flag is set and we exit the loop.
     bne Player1Loop
 
     lda #0
@@ -144,8 +159,8 @@ Player1Loop:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loop to next frame
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    jmp StartFrame
-
+    jmp StartFrame       ; This gets rendered over and over again.
+                         ; Renders the scoreboard, players, etc. multiple times.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Defines an array of bytes to draw the player.
