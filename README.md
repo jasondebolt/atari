@@ -22,7 +22,7 @@ MOS 6502 Atari projects
 * [Atari Color Palette](https://en.wikipedia.org/wiki/List_of_video_game_console_palettes#Atari_2600)
 
 ## Memory Map
-<img src="memory_map.png" height="200px"/>
+<img src="memory_map.png" height="150px"/>
 
 ## Development
 You can develop Atari 6502 assembly offline or online (in the browser).
