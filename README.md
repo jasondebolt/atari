@@ -27,6 +27,11 @@ MOS 6502 Atari projects
 ## Memory Map
 <img src="memory_map.png" height="150px"/>
 
+## Sprites
+Use the [PlayerPal Online Sprite Creator](https://alienbill.com/2600/playerpalnext.html).
+<p>
+<img src="sprites.png" height="350"></img>
+
 ## Development
 You can develop Atari 6502 assembly offline or online (in the browser).
 
