@@ -123,12 +123,16 @@ OR
 ## Python Helpers
 View binary representation of a number:
 ```python
-def form(exp):
-    return '{0:08b}'.format(exp)
-    
-Example:
->>> form(10 ^ 5)
+b8 = lambda x: '{0:08b}'.format(x)
+h8 = lambda x: '{0:08x}'.format(x)
+b16 = lambda x: '{0:016b}'.format(x)
+h16 = lambda x: '{0:016x}'.format(x)
+b32 = lambda x: '{0:032b}'.format(x)
+h32 = lambda x: '{0:032x}'.format(x)
+
+Examples:
+>>> b8(10 ^ 5)
 '00001111'
->>> form(0b1010 ^ 0b0101)
-'00001111'
+>>> h8(0b1010 ^ 0b0101)
+'0000000f'
 ```
