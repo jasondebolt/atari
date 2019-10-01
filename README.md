@@ -123,8 +123,8 @@ OR
 ## Python Helpers
 View binary representation of a number:
 ```python
-b8 = lambda x: '{0:08b}'.format(x)
-h8 = lambda x: '{0:08x}'.format(x)
+b = lambda x: '{0:08b}'.format(x)
+h = lambda x: '{0:08x}'.format(x)
 b16 = lambda x: '{0:016b}'.format(x)
 h16 = lambda x: '{0:016x}'.format(x)
 b32 = lambda x: '{0:032b}'.format(x)
