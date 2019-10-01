@@ -22,6 +22,7 @@ MOS 6502 Atari projects
 * [8 Bit Workshop](http://8bitworkshop.com)
 * [macro.h and vcs.h files](https://github.com/munsie/dasm/tree/master/machines/atari2600)
 * [Atari Color Palette](https://en.wikipedia.org/wiki/List_of_video_game_console_palettes#Atari_2600)
+* [PlayerPal Online Sprite Creator](https://alienbill.com/2600/playerpalnext.html)
 
 ## Memory Map
 <img src="memory_map.png" height="150px"/>
