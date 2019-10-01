@@ -1,6 +1,14 @@
 # Atari 6502 Projects
 MOS 6502 Atari projects
 
+## Table Of Contents
+* [Links](#links)
+* [Memory Map](#memory-map)
+* [Setup](#setup)
+  * [DASM Macro Assembler](#dasm-macro-assembler)
+  * [Creating the cleanmem machine code binary](#creating-the-cleanmem-machine-code-binary)
+  * [Running cleanmem in the Stella emulator](#running-cleanmem-in-the-stella-emulator)
+
 ## Links
 * [8 Bit Workshop Browser IDE](https://8bitworkshop.com)
 * [NMOS 6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
@@ -14,12 +22,14 @@ MOS 6502 Atari projects
 ## Memory Map
 <img src="memory_map.png" height="200px"/>
 
-## DASM Macro Assembler
+## Setup
+
+### DASM Macro Assembler
 1) Download DASM for mac (or whatever your OS is)
 2) Unzip or untar it
 3) Sudo copy dasm to /usr/local/bin
 
-## Creating the cleanmem machine code binary
+### Creating the cleanmem machine code binary
 The `-f3` is the Atari 6507 version.
 ```
 $ dasm cleanmem.asm -f3 -v0 -ocart.bin
