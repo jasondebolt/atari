@@ -12,6 +12,7 @@ MOS 6502 Atari projects
     * [Running cleanmem in the Stella emulator](#running-cleanmem-in-the-stella-emulator)
 
 ## Links
+* [Gustavo Pezzi's online "Programming Games for the Atari 2600" course](https://www.udemy.com/course/programming-games-for-the-atari-2600)
 * [8 Bit Workshop Browser IDE](https://8bitworkshop.com)
 * [NMOS 6502 Opcodes](http://www.6502.org/tutorials/6502opcodes.html)
 * [DASM Macro Assembler](http://dasm-dillon.sourceforge.net/)
