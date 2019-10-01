@@ -11,6 +11,8 @@ MOS 6502 Atari projects
 * [macro.h and vcs.h files](https://github.com/munsie/dasm/tree/master/machines/atari2600)
 * [Atari Color Palette](https://en.wikipedia.org/wiki/List_of_video_game_console_palettes#Atari_2600)
 
+## Memory Map
+<img src="memory_map.png" height="200px"/>
 
 ## DASM Macro Assembler
 1) Download DASM for mac (or whatever your OS is)
