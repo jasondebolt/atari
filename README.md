@@ -24,10 +24,12 @@ $ chmod a+x cart.bin
 ```
 
 ## Running cleanmem in the Stella emulator
-1) alias stella="/Applications/Stella.app/Contents/MacOS/Stella"
-2) cd colorbg
-3) make
-3) stella cart.bin
+```
+$ alias stella="/Applications/Stella.app/Contents/MacOS/Stella"
+$ cd colorbg
+$ make
+$ stella cart.bin
+```
 OR
 1) Open the Stella emulator
 2) Select the path to your cart.bin file
