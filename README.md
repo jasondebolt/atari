@@ -26,6 +26,8 @@ MOS 6502 Atari projects
 * [Atari Color Palette](https://en.wikipedia.org/wiki/List_of_video_game_console_palettes#Atari_2600)
 * [PlayerPal Online Sprite Creator](https://alienbill.com/2600/playerpalnext.html)
 
+## Eater.net
+* [Ben Eater's 6502 electronics kits](https://eater.net/)
 
 ## 6502.org
 * [Assembly In One Step](https://dwheeler.com/6502/oneelkruns/asm1step.html)
