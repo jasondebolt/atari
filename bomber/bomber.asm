@@ -41,7 +41,7 @@ Reset:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     lda #10
     sta JetYPos                      ; JetYPos = 10
-    lda #60
+    lda #0
     sta JetXPos                      ; JetXPos = 60
     lda #83
     sta BomberYPos                   ; BomberYPos = 83
@@ -75,6 +75,20 @@ Reset:
 ;; Start the main display loop and frame rendering
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 StartFrame:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Calculations and tasks performed in the pre-VBLANK
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    lda JetXPos
+    ldy #0
+    jsr SetObjectXPos                ; set player0 horizontal position
+
+    lda BomberXPos
+    ldy #1
+    jsr SetObjectXPos               ; set player1 horizontal position
+
+    sta WSYNC
+    sta HMOVE                       ; apply the horizontal offset previously set
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display VSYNC and VBLANK
@@ -159,9 +173,59 @@ GameVisibleLine:
     sta VBLANK                       ; Turn off VBLANK
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Process joystick input for player 0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CheckP0Up:
+    lda #%00010000                   ; player 0 joystick up
+    bit SWCHA
+    bne CheckP0Down                  ; if bit pattern doesn't match, bypass Up block
+    inc JetYPos
+
+CheckP0Down:
+    lda #%00100000                   ; player 0 joystick up
+    bit SWCHA
+    bne CheckP0Left                  ; if bit pattern doesn't match, bypass Down block
+    dec JetYPos
+
+CheckP0Left:
+    lda #%01000000                   ; player 0 joystick up
+    bit SWCHA
+    bne CheckP0Right                 ; if bit pattern doesn't match, bypass Left block
+    dec JetXPos
+
+CheckP0Right:
+    lda #%10000000                   ; player 0 joystick up
+    bit SWCHA
+    bne EndInputCheck                ; if bit pattern doesn't match, bypass Right block
+    inc JetXPos
+
+EndInputCheck:                       ; fallback when no input was performed
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loop back to start a brand new frame
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     jmp StartFrame                     ; Continue to display the next frame
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Subroutine to handle object horizontal position with fine offset
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; A is the target x-coorindate position in pixels of our object
+;; Y is the object type (0:player0, 1:player1, 2:missle0, 3:missle1, 4:ball)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+SetObjectXPos subroutine
+    sta WSYNC                          ; Starts a fresh new scanline
+    sec                                ; Makes sure carry-flag is set before subtraction
+.Div15Loop
+    sbc #15                            ; Subtracts 15 from accumulator
+    bcs .Div15Loop                     ; Loops until carry-flag is clear
+    eor #7                             ; Handles offset range -8 to 7 (hmm, does this just do a NOT? Applying a XOR with 1111... is just a NOT.)
+    asl
+    asl
+    asl
+    asl                                ; four shift lefts to get only the top 4 bits
+    sta HMP0,Y                         ; store the fine offset to the correct HMxx
+    sta RESP0,Y                        ; fix object position in 15-step increment
+    rts
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Declare ROM lookup tables
