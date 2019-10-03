@@ -42,8 +42,21 @@ MOS 6502 Atari projects
      * [Spec Change](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-06.html)
      * [Draw the Playfield](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-07.html)
      * [Select and Reset Support](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-08.html)
+     * [Game Variations](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-09.html)
+     * [Random Numbers](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-10.html)
+     * [Add the Ball Object](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-11.html)
+     * [Add the Missle Objects](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-12.html)
+     * [Add Sound Effects](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-13.html)
+     * [Add Animation](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-14.html)
 * [Atari 2600 programming for newbies](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-01.html)
-    * [The Basics](
+    * [Session 1 - Start Here](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-01.html)
+    * [Session 2  - Televsion and Display Basics](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-02.html)
+    * [Session 3 - The TIA and the 6502](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-03.html)
+    * [Session 4 - The TIA](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-04.html)
+    * [Session 5 - Memory Architecture](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-05.html)
+    * [Session 7 - The TV and our Kernel](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-07.html)
+    * [Session 8 - Our first kernel](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-08.html)
+    * [Session 9 - 6502 and DASM - Assembling the Basics](https://www.randomterrain.com/atari-2600-memories-tutorial-andrew-davie-09.html)
 
 
 ## 6502.org
