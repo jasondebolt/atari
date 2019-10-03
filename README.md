@@ -196,36 +196,3 @@ OR
 2) Select the path to your cart.bin file
 3) Double click on cart.bin
 4) Enter the backtick (\`) to toggle between debug mode.
-
-
-
-## Python Helpers
-View binary representation of a number:
-```python
-b = lambda x: '{0:08b}'.format(x)
-h = lambda x: '{0:08x}'.format(x)
-b16 = lambda x: '{0:016b}'.format(x)
-h16 = lambda x: '{0:016x}'.format(x)
-b32 = lambda x: '{0:032b}'.format(x)
-h32 = lambda x: '{0:032x}'.format(x)
-
-Examples:
->>> b8(10 ^ 5)
-'00001111'
->>> h8(0b1010 ^ 0b0101)
-'0000000f'
-
-
-x << y
-Returns x with the bits shifted to the left by y places (and new bits on the right-hand-side are zeros). This is the same as multiplying x by 2**y.
-x >> y
-Returns x with the bits shifted to the right by y places. This is the same as //'ing x by 2**y.
-x & y
-Does a "bitwise and". Each bit of the output is 1 if the corresponding bit of x AND of y is 1, otherwise it's 0.
-x | y
-Does a "bitwise or". Each bit of the output is 0 if the corresponding bit of x AND of y is 0, otherwise it's 1.
-~ x
-Returns the complement of x - the number you get by switching each 1 for a 0 and each 0 for a 1. This is the same as -x - 1.
-x ^ y
-Does a "bitwise exclusive or". Each bit of the output is the same as the corresponding bit in x if that bit in y is 0, and it's the complement of the bit in x if that bit in y is 1.
-```
