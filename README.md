@@ -34,6 +34,7 @@ MOS 6502 Atari projects
 
 ## Random Terrain (Atari Tutorials)
 * [Guide to Cycle Counting on the Atari 2600](https://www.randomterrain.com/atari-2600-memories-guide-to-cycle-counting.html)
+* [How to Draw a Playfield](https://www.randomterrain.com/atari-2600-memories-how-to-draw-a-playfield.html)
 * [Assembly Language Programming](https://www.randomterrain.com/atari-2600-memories-tutorial-robert-m-01.html)
     * [Lesson 1: Bits!](https://www.randomterrain.com/atari-2600-memories-tutorial-robert-m-01.html)
     * [Lesson 2: Enumeration](https://www.randomterrain.com/atari-2600-memories-tutorial-robert-m-02.html)
