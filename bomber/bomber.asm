@@ -41,14 +41,14 @@ Reset:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialized RAM variables and also TIA registers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    lda #68
+    sta JetXPos                      ; JetYPos = 10
     lda #10
-    sta JetYPos                      ; JetYPos = 10
-    lda #0
-    sta JetXPos                      ; JetXPos = 60
+    sta JetYPos                      ; JetXPos = 60
+    lda #62
+    sta BomberXPos                   ; BomberYPos = 83
     lda #83
-    sta BomberYPos                   ; BomberYPos = 83
-    lda #54
-    sta BomberXPos                   ; BomberYPos = 54
+    sta BomberYPos                   ; BomberYPos = 54
     lda #%11010100
     sta Random                       ; Random = $D4 (This is a seed value)
 
@@ -110,40 +110,55 @@ StartFrame:
     REPEND
     sta VBLANK                       ; Turn off VBLANK
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Display the 96 visible scanlines of our main game (because 2-line kernel)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Display the scoreboard lines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    lda #0                          ; clear the TIA registers before each new frame
+    sta PF0
+    sta PF1
+    sta PF2
+    sta GRP0
+    sta GRP1
+    sta COLUPF
+    REPEAT 20
+        sta WSYNC                   ; Displays 20 scanlines where the scoreboard goes
+    REPEND
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Display the remaining visible scanlines of our main game (2-line kernel)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 GameVisibleLine:
     lda #$84
-    sta COLUBK                       ; Set color background to blue
-    lda #$c2
-    sta COLUPF                       ; set playfield/gress color to green
+    sta COLUBK               ; set background/river color to blue
+    lda #$C2
+    sta COLUPF               ; set playfield/grass color to green
     lda #%00000001
-    sta CTRLPF                       ; enable playfield reflection
+    sta CTRLPF               ; enable playfield reflection
     lda #$F0
-    sta PF0                          ; Setting PFO bit pattern
+    sta PF0                  ; setting PF0 bit pattern
     lda #$FC
-    sta PF1                          ; Setting PF1 bit pattern
+    sta PF1                  ; setting PF1 bit pattern
     lda #0
-    sta PF2                          ; Setting PF2 bit pattern
-    ldx #96                         ; X counts the number of remaining scanlines
+    sta PF2                  ; setting PF2 bit pattern
+
+    ldx #84                  ; X counts the number of remaining scanlines
 .GameLineLoop:
 .AreWeInsideJetSprite:
-    txa                             ; transfer X to a
-    sec                             ; make sure carry flag is set before subtraction
-    sbc JetYPos                     ; subtract sprite Y-coorindate
-    cmp JET_HEIGHT                  ; are we inside the sprite height bounds?
-    bcc .DrawSpriteP0               ; if result < SpriteHeight, call the draw routine
-    lda #0                          ; else, set lookup index to zero
+    txa                      ; transfer X to A
+    sec                      ; make sure carry flag is set before subtraction
+    sbc JetYPos              ; subtract sprite Y-coordinate
+    cmp JET_HEIGHT           ; are we inside the sprite height bounds?
+    bcc .DrawSpriteP0        ; if result < SpriteHeight, call the draw routine
+    lda #0                   ; else, set lookup index to zero
 .DrawSpriteP0:
-    clc                             ; Clears carry flag before addition
-    adc JetAnimationOffset          ; Jumps to correct sprite frame address in memory
-    tay                             ; load Y so we can work with the pointer
-    lda (JetSpritePtr),Y            ; load player0 bitmap data from lookup table
-    sta WSYNC                       ; wait for scanline
-    sta GRP0                        ; set graphics for player0
-    lda (JetColorPtr),Y             ; Load player color from lookup table
-    sta COLUP0
+    clc                      ; clear carry flag before addition
+    adc JetAnimationOffset        ; jump to correct sprite frame address in memory
+    tay                      ; load Y so we can work with the pointer
+    lda (JetSpritePtr),Y     ; load player0 bitmap data from lookup table
+    sta WSYNC                ; wait for scanline
+    sta GRP0                 ; set graphics for player0
+    lda (JetColorPtr),Y      ; load player color from lookup table
+    sta COLUP0               ; set color of player 0
 
 
 .AreWeInsideBomberSprite:
@@ -170,6 +185,8 @@ GameVisibleLine:
 
     lda #0
     sta JetAnimationOffset
+
+    sta WSYNC                ; wait for a scanline
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display Overscan
@@ -215,7 +232,6 @@ CheckP0Right:
 
 EndInputCheck:                       ; fallback when no input was performed
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Calculations to update position for next frame
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -226,12 +242,32 @@ UpdateBomberPosition:
     bmi .ResetBomberPosition          ; if it is < 0, then reset y-position for next frame
     dec BomberYPos                    ; else, decrement enemy y-position for next frame
     jmp EndPositionUpdate
-
 .ResetBomberPosition
     jsr GetRandomBomberPosition       ; Calls subroutine for random x-position
 
 EndPositionUpdate:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Check for object collision
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CheckCollisionP0P1:
+    lda #%10000000           ; CXPPMM bit 7 detects P0 and P1 collision
+    bit CXPPMM               ; check CXPPMM bit 7 with the above pattern
+    bne .CollisionP0P1       ; if collision between P0 and P1 happened, branch
+    jmp CheckCollisionP0PF   ; else, skip to next check
+.CollisionP0P1:
+    jsr GameOver             ; call GameOver subroutine
+
+CheckCollisionP0PF:
+    lda #%10000000           ; CXP0FB bit 7 detects P0 and PF collision
+    bit CXP0FB               ; check CXP0FB bit 7 with the above pattern
+    bne .CollisionP0PF       ; if collision P0 and PF happened, branch
+    jmp EndCollisionCheck    ; else, skip to next check
+.CollisionP0PF:
+    jsr GameOver             ; call GameOver subroutine
+
+EndCollisionCheck:           ; fallback
+    sta CXCLR                ; clear all collision flags before the next frame
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loop back to start a brand new frame
@@ -257,6 +293,14 @@ SetObjectXPos subroutine
     asl                                ; four shift lefts to get only the top 4 bits
     sta HMP0,Y                         ; store the fine offset to the correct HMxx
     sta RESP0,Y                        ; fix object position in 15-step increment
+    rts
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Game Over subroutine
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+GameOver subroutine
+    lda #$30
+    sta COLUBK
     rts
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -296,7 +340,7 @@ GetRandomBomberPosition subroutine
 
 ;---Graphics Data from PlayerPal 2600---
 
-JetSprite
+JetSprite:
         .byte #%00000000;$00
         .byte #%00101000;$32
         .byte #%11111110;$0E
@@ -306,7 +350,8 @@ JetSprite
         .byte #%00010000;$AE
         .byte #%00010000;--
         .byte #%00010000;--
-JetSpriteTurn
+
+JetSpriteTurn:
         .byte #%00000000;$00
         .byte #%00101000;$32
         .byte #%01111100;$0E
@@ -316,7 +361,8 @@ JetSpriteTurn
         .byte #%00010000;$AE
         .byte #%00010000;--
         .byte #%00010000;--
-BomberSprite
+
+BomberSprite:
         .byte #%00000000;$00
         .byte #%00010000;$00
         .byte #%00010000;$40
@@ -331,7 +377,7 @@ BomberSprite
 
 ;---Color Data from PlayerPal 2600---
 
-JetColor
+JetColor:
         .byte #$00;
         .byte #$32;
         .byte #$0E;
@@ -341,7 +387,8 @@ JetColor
         .byte #$AE;
         .byte #$0E;
         .byte #$0E;
-JetColorTurn
+
+JetColorTurn:
         .byte #$00;
         .byte #$32;
         .byte #$0E;
@@ -351,7 +398,8 @@ JetColorTurn
         .byte #$AE;
         .byte #$0E;
         .byte #$0E;
-BomberColor
+
+BomberColor:
         .byte #$00;
         .byte #$36;
         .byte #$36;
