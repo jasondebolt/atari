@@ -131,8 +131,16 @@ MOS 6502 Atari projects
              
        C  =  CARRY. Set if the add produced a carry, or if the subtraction
              produced a borrow.  Also holds bits after a logical shift.
+             
  ```            
-        
+### Processor Flags Table
+| Flag | Name | Description
+----|-------|----------------|
+| Z | Zero | Set when the result is zero |
+| N | Negative/Sign | Set when the result is negative (high bit set) |
+| C | Carry | Set when an arithmetic operation <b>wraps</b> and carries the high bit |
+| V | Overflow | Set when an arithmetic operation <b>overflows</b>; i.e if the sign of the result changes due to overview |
+ 
 
 ## Atari Memory Map
 <img src="memory_map.png" height="150px"/>
