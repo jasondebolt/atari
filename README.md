@@ -25,6 +25,7 @@ MOS 6502 Atari projects
 * [macro.h and vcs.h files](https://github.com/munsie/dasm/tree/master/machines/atari2600)
 * [Atari Color Palette](https://en.wikipedia.org/wiki/List_of_video_game_console_palettes#Atari_2600)
 * [PlayerPal Online Sprite Creator](https://alienbill.com/2600/playerpalnext.html)
+* [Stella Programmers Guide](https://alienbill.com/2600/101/docs/stella.html)
 
 ## Eater.net
 * [Ben Eater's 6502 electronics kits](https://eater.net/)
