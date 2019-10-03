@@ -406,7 +406,7 @@ EndCollisionCheck:
 ;; We start from frequency 25 and then subtract the result of (JetYPos / 8)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 GenerateJetSound subroutine
-    lda JetYPos              ; load accumulator with jet y-position
+    lda JetXPos              ; load accumulator with jet y-position
     lsr
     lsr
     lsr                      ; divide accumulator by 8 with 3 right shifts
