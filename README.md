@@ -8,6 +8,7 @@ MOS 6502 Atari projects
 * [Eater.net](#eaternet)
 * [Random Terrain](#random-terrain-atari-tutorials)
 * [Processor Flags](#processor-flags)
+* [Shift Operations](#shift-operations)
 * [Atari Memory Map](#atari-memory-map)
 * [Development](#development)
   * [Online Development](#online-development)
@@ -141,6 +142,15 @@ MOS 6502 Atari projects
 | C | Carry | Set when an arithmetic operation <b>wraps</b> and carries the high bit |
 | V | Overflow | Set when an arithmetic operation <b>overflows</b>; i.e if the sign of the result changes due to overview |
  
+
+## Shift Operations
+|Operation|Name|Description|
+----------|-----|----------|
+|ASL|Shift Left|Shift left 1 bit (multiply by 2), bit 7 --> Carry|
+|LSR|Shift Right|Shift right 1 bit (divide by 2), bit 0 --> Carry|
+|ROL|Rotate Left|Same as ASL except Carry --> bit 0|
+|ROR|Rotate Right|Same as LSR except Carry --> bit 7|
+
 
 ## Atari Memory Map
 <img src="memory_map.png" height="150px"/>
