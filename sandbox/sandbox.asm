@@ -57,13 +57,22 @@ Loop2Through8Better:                  ; A = 0, A = 2, A = 4, A = 6, A = 8
                                       ; n->N on second pass
                                       ; n->N on third pass
                                       ; z->Z on fourth pass
-                                      ; c->C on fourth pas  s
+                                      ; c->C on fourth pass
+                                      ; Value is 'n' on fourth pass
 
     bne Loop2Through8Better
 
-    sta VBLANK            ; Turns on VBLANK
-    sta VSYNC             ; Turns on VSYNC
 
+    lda #$FF                          ; Loads the constant FF (NOT from memory)
+                                      ; n->N
+                                      ; Z->z
+
+TestROR:
+    lda #$03                                              ; $03   00000011  C
+    sec                              ; set carry flag
+    ror                              ; rotate right       ; $81   10000001  C
+    ror                              ; rotate right       ; $81   11000000  C
+    ror                              ; rotate right       ; $81   11100000
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Generate the three lines of the VSYNC
@@ -74,6 +83,20 @@ Loop2Through8Better:                  ; A = 0, A = 2, A = 4, A = 6, A = 8
 
     lda #0
     sta VSYNC             ; turn off VSYNC
+
+TestStack:
+    lda #$45              ; Stack pointer is at $FF
+    pha                   ; Push $45 constant onto stack (usually at memory location $FF)
+    lda #$44
+    pha                   ; Push $45 constant onto stack (usually at memory location $FE)
+    lda #$43
+    pha                   ; Push $45 constant onto stack (usually at memory location $FE)
+    lda #$00
+    pla                   ; A is now set to $43, sp (stack pointer) is now at $fd
+    pla                   ; A is now set to $44, sp is now at $fe
+    pla                   ; A is now set to $45, sp is now at $ff
+                          ; Note that when you pull bytes from the stack, the bytes actually remain on the stack.
+                          ; Only the stack pointer is incremented when you pull stuff off the stack.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Let the TIA output the recommended 37 scanlines of VBLANK
