@@ -3,69 +3,157 @@
     include "vcs.h"
     include "macro.h"
 
+    seg.u Variables
+    org $80
+P0Height   byte    ; player sprite height
+PlayerYPos byte    ; player sprite Y coordinate
     seg code
     org $F000
+Reset:
+    CLEAN_START    ; macro to clean memory and TIA
+    ldx #$00       ; black background color
+    stx COLUBK
+    lda #180
+    sta PlayerYPos ; PlayerYPos = 180
+    lda #9
+    sta P0Height   ; P0Height = 9
 
-Start:
-    CLEAN_START          ; Macro to safely clean memory and TIA address space
+StartFrame:
+    lda #2
+    sta VBLANK   ; on
+    sta VSYNC    ; on
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Start a new frame by turning on VBLANK and VSYNC
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-NextFrame:
-    lda #2                ; same as binary value %00000010
-    sta VBLANK            ; Turns on VBLANK
-    sta VSYNC             ; Turns on VSYNC
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Generate the three lines of the VSYNC
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    sta WSYNC             ; first scanline
-    sta WSYNC             ; second scanline
-    sta WSYNC             ; third scanline
+    sta WSYNC    ; strobe
+    sta WSYNC    ; strobe
+    sta WSYNC    ; strobe
 
     lda #0
-    sta VSYNC             ; turn off VSYNC
+    sta VSYNC     ; off
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Let the TIA output the recommended 37 scanlines of VBLANK
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ldx #37               ; X = 37 (to count 37 scanlines)
-LoopVBlank:
-    sta WSYNC             ; hit WSYNC and wait for the next scanline
-    dex                   ; X--
-    bne LoopVBlank        ; loop while X != 0
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
+    sta WSYNC     ; strobe
 
     lda #0
-    sta VBLANK            ; turn off VBLANK
+    sta VBLANK    ; off
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Draw 192 visible scanlines (kernel)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ldx #192              ; counter for 192 visible scanlines
-LoopVisible:
-    stx COLUBK            ; set the background color
-    sta WSYNC             ; wait for the next scanline
-    dex                   ; X--
-    bne LoopVisible       ; loop while X != 0
+    ldx #192
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Output 30 more VBLANK lines (overscan) to complete out frame
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    lda #2                ; hit and turn on VBLANK again
-    sta VBLANK
-    ldx #30               ; counter for 30 scanlines
-LoopOverscan:
-    sta WSYNC             ; wait for the next scanline
-    dex                   ; X--
-    bne LoopOverscan      ; loop while X != 0
+Scanline:
+    txa
+    sec            ; make sure carry flag is set. Always set the carry flag before you do a subtraction.
+    sbc PlayerYPos ; subtract sprite Y coordinate from the accumulator.
+    cmp P0Height  ; are we inside the sprite height bounds?
+    bcc LoadBitmap ; if result < SpriteHeight, call subroutine
+    lda #0         ; else, set index to 0
 
-    jmp NextFrame         ;
+LoadBitmap:
+    tay
+    lda P0Bitmap,Y ; load player bitmap slice of data
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Complete my ROM size to 4KB
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; Update TIA registers immediately after WSYNC!
+    sta WSYNC      ; wait for next scanline
+    sta GRP0       ; set graphics for player 0 slice
+    lda P0Color,Y  ; load player color from lookup table
+    sta COLUP0     ; set color for player 0 slice
+
+    dex
+    bne Scanline   ; repeat next scanline until finished
+
+
+Overscan:
+    lda #2
+    sta VBLANK        ; on
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+    sta WSYNC         ; strobe
+
+    dec PlayerYPos
+    jmp StartFrame
+
+
+P0Bitmap:
+    byte #%00000000
+    byte #%00101000
+    byte #%01110100
+    byte #%11111010
+    byte #%11111010
+    byte #%11111010
+    byte #%11111110
+    byte #%01101100
+    byte #%00110000
+P0Color:
+    byte #$00
+    byte #$40
+    byte #$40
+    byte #$40
+    byte #$40
+    byte #$42
+    byte #$42
+    byte #$44
+    byte #$D2
+
     org $FFFC
-    .word Start
-    .word Start
+    .word Reset
+    .word Reset
